@@ -27,7 +27,7 @@ namespace Data
                 }
                 catch (Exception ex)
                 {
-                    throw new ApplicationException("The data fetch operation failed ", ex);
+                    throw new Exception("The data fetch operation failed ", ex);
                 }
             }
         }
