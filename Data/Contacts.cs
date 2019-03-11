@@ -19,9 +19,16 @@ namespace Data
             using (var stream = assembly.GetManifestResourceStream(resourceName))
             using (StreamReader reader = new StreamReader(stream))
             {
-                string json = reader.ReadToEnd();
-                ContactsData result = JsonConvert.DeserializeObject<ContactsData>(json);
-                return result;
+                try
+                {
+                    string json = reader.ReadToEnd();
+                    ContactsData result = JsonConvert.DeserializeObject<ContactsData>(json);
+                    return result;
+                }
+                catch (Exception ex)
+                {
+                    throw new ApplicationException("The data fetch operation failed ", ex);
+                }
             }
         }
 
@@ -33,7 +40,7 @@ namespace Data
         }
 
         //[Obsolete("GetContactsPaged is deprecated, collection functions are performed at presentation layer.")]
-        public static IQueryable<Contact> GetContactsPaged(string criteria, string orderByColumn, string orderByDirection, int initialPage, int pageSize, out int recordCount, out int recordsFiltered)
+        public static ContactsData GetContactsPaged(string criteria, string orderByColumn, string orderByDirection, int initialPage, int pageSize, out int recordCount, out int recordsFiltered)
         {
             ContactsData dbData = ReadContactDocument();
             recordCount = dbData.Data.Count();
@@ -41,7 +48,7 @@ namespace Data
 
             if (!string.IsNullOrEmpty(criteria))
             {
-                contacts = contacts.Where(x => x.FirstName.ToUpper().Contains(filter.ToUpper()));
+                contacts = contacts.Where(x => x.FirstName.ToUpper().Contains(criteria.ToUpper()));
             }
 
             recordsFiltered = contacts.Count();
@@ -50,7 +57,7 @@ namespace Data
                 .Skip(initialPage * pageSize)
                 .Take(pageSize);
 
-            return contacts.AsQueryable<Contact>();
+            return dbData;
         }
         private static IEnumerable<Contact> OrderResults<Contact>(IEnumerable<Contact> data, string orderByColumn, string orderByDirection)
         {

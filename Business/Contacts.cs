@@ -13,7 +13,7 @@ namespace Business
             return Data.Contacts.GetAllContacts();
         }
 
-        public static IQueryable<Contact> GetContactsPaged(string filter, string orderByColumn, string orderByDirection, int initialPage, int pageSize, out int recordCount, out int recordsFiltered)
+        public static ContactsData GetContactsPaged(string filter, string orderByColumn, string orderByDirection, int initialPage, int pageSize, out int recordCount, out int recordsFiltered)
         {
             return Data.Contacts.GetContactsPaged(filter, orderByColumn, orderByDirection, initialPage, pageSize, out recordCount, out recordsFiltered);
         }
