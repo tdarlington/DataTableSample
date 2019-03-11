@@ -1,0 +1,50 @@
+﻿
+
+<h2>Contacts</h2>
+
+<table class="table" id="Contacts">
+    <thead>
+        <tr>
+            <th>
+                First Name
+            </th>
+            <th>
+                Last Name
+            </th>
+            <th>
+                Mobile #
+            </th>
+            <th>
+                Address
+            </th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+@section scripts {
+    <script>
+        (function ($) {
+            var generateCustomerTable = $("#Contacts")
+                .dataTable({
+                    "processing": true,
+                    "serverSide": true,
+                    "ajax": {
+                        "url": "/api/contacts",
+                        "method": "POST",
+                        "dataSrc": "Data"
+                    },
+                    "columns": [
+                        { "data": "FirstName" },
+                        { "data": "LastName" },
+                        { "data": "CellNumber" },
+                        { "data": "Address" }
+                    ],
+                    "searching": true,
+                    "ordering": true,
+                    "paging": true,
+                    "pageLength": 10
+                });
+        })(jQuery);
+    </script>
+}
